@@ -1,0 +1,139 @@
+services:
+  postgres-primary-1:
+    image: postgres:16-alpine
+    container_name: postgres-primary-1
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+      POSTGRES_DB: appdb
+      REPL_PASSWORD: replpass
+    command:
+      - postgres
+      - -c
+      - wal_level=logical
+      - -c
+      - max_wal_senders=32
+      - -c
+      - max_replication_slots=32
+      - -c
+      - max_logical_replication_workers=16
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg1_data:/var/lib/postgresql/data
+      - ../../database/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  postgres-primary-2:
+    image: postgres:16-alpine
+    container_name: postgres-primary-2
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+      POSTGRES_DB: appdb
+      REPL_PASSWORD: replpass
+    command:
+      - postgres
+      - -c
+      - wal_level=logical
+      - -c
+      - max_wal_senders=32
+      - -c
+      - max_replication_slots=32
+      - -c
+      - max_logical_replication_workers=16
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg2_data:/var/lib/postgresql/data
+      - ../../database/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  postgres-primary-3:
+    image: postgres:16-alpine
+    container_name: postgres-primary-3
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+      POSTGRES_DB: appdb
+      REPL_PASSWORD: replpass
+    command:
+      - postgres
+      - -c
+      - wal_level=logical
+      - -c
+      - max_wal_senders=32
+      - -c
+      - max_replication_slots=32
+      - -c
+      - max_logical_replication_workers=16
+    ports:
+      - "5434:5432"
+    volumes:
+      - pg3_data:/var/lib/postgresql/data
+      - ../../database/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  replication-bootstrap:
+    image: postgres:16-alpine
+    container_name: replication-bootstrap
+    depends_on:
+      postgres-primary-1:
+        condition: service_healthy
+      postgres-primary-2:
+        condition: service_healthy
+      postgres-primary-3:
+        condition: service_healthy
+    environment:
+      POSTGRES_PASSWORD: apppass
+      REPL_PASSWORD: replpass
+    volumes:
+      - ../../database/replication/bootstrap.sh:/bootstrap.sh:ro
+    entrypoint: ["/bin/sh", "/bootstrap.sh"]
+    restart: "no"
+
+  enterprise-backend:
+    build:
+      context: ../../backend
+      dockerfile: Dockerfile
+    container_name: enterprise-backend
+    environment:
+      PORT: "8080"
+      DATABASE_URL: postgres://appuser:apppass@postgres-primary-1:5432/appdb?sslmode=disable
+      LOG_LEVEL: info
+      CORS_ORIGIN: "*"
+    depends_on:
+      postgres-primary-1:
+        condition: service_healthy
+      replication-bootstrap:
+        condition: service_completed_successfully
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    container_name: enterprise-frontend
+    depends_on:
+      - enterprise-backend
+    ports:
+      # Host 3000 avoids clashing with other services bound to :80 (change if needed).
+      - "${FRONTEND_HOST_PORT:-3000}:80"
+
+volumes:
+  pg1_data:
+  pg2_data:
+  pg3_data:

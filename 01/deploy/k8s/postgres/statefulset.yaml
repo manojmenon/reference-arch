@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-primary
+spec:
+  serviceName: postgres-headless
+  replicas: 3
+  selector:
+    matchLabels:
+      app: postgres-primary
+  template:
+    metadata:
+      labels:
+        app: postgres-primary
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+              name: pg
+          envFrom:
+            - secretRef:
+                name: postgres-credentials
+          args:
+            - postgres
+            - -c
+            - wal_level=logical
+            - -c
+            - max_wal_senders=32
+            - -c
+            - max_replication_slots=32
+            - -c
+            - max_logical_replication_workers=16
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+            - name: init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB)"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      volumes:
+        - name: init-scripts
+          configMap:
+            name: postgres-init-sql
+            items:
+              - key: "01-schema.sql"
+                path: "01-schema.sql"
+              - key: "02-replication-user.sql"
+                path: "02-replication-user.sql"
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi

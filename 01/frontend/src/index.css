@@ -1,0 +1,45 @@
+:root {
+  color-scheme: light;
+  --bg: #f4f2ee;
+  --surface: #ffffff;
+  --ink: #1a1c1e;
+  --muted: #5c636a;
+  --accent: #0d5c63;
+  --accent-soft: #e6f3f4;
+  --danger: #b42318;
+  --border: #d9d4cd;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+h1 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+}
+
+a {
+  color: var(--accent);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+input {
+  font: inherit;
+}
