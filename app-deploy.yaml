@@ -11,7 +11,7 @@ spec:
     path: helm/ref-app-01
   destination:
     server: https://kubernetes.default.svc
-    namespace: ref-app-01
+    namespace: default
   syncPolicy:
     automated:
       prune: true
