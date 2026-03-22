@@ -2,6 +2,7 @@
 
 Production-style reference stack: **React + TypeScript** frontend, **Go (Gin)** API with clean architecture, and **three PostgreSQL 16** instances. **postgres-primary-1** is the sole write target; **logical replication** fans out to the other two nodes (same dataset, read-replica style). Vanilla PostgreSQL logical replication does not provide a safe multi-master mesh without conflict resolution—duplicate write paths would cause primary-key violations—so this project implements a **primary + replicas** topology, not bidirectional multi-master replication.
 
+** Test**
 ---
 
 ## Contents
