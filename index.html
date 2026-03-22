@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reference Architecture</title>
+    <meta
+      name="description"
+      content="Curated reference implementations for enterprise-style stacks: frontends, APIs, databases, and deployment patterns."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0f1419;
+        --surface: #1a222d;
+        --text: #e8edf3;
+        --muted: #9aa8b6;
+        --accent: #3d9a78;
+        --accent-dim: #2d7359;
+        --border: #2a3542;
+        --radius: 12px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "DM Sans", system-ui, sans-serif;
+        background: radial-gradient(ellipse 120% 80% at 50% -20%, #1e2a38 0%, var(--bg) 55%);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      .wrap {
+        max-width: 52rem;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 4rem;
+      }
+
+      header {
+        margin-bottom: 2.5rem;
+      }
+
+      h1 {
+        font-family: "Fraunces", Georgia, serif;
+        font-weight: 700;
+        font-size: clamp(1.75rem, 4vw, 2.25rem);
+        letter-spacing: -0.02em;
+        margin: 0 0 0.75rem;
+        line-height: 1.2;
+      }
+
+      .lede {
+        font-size: 1.125rem;
+        color: var(--muted);
+        max-width: 40em;
+        margin: 0;
+      }
+
+      h2 {
+        font-family: "Fraunces", Georgia, serif;
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin: 2rem 0 1rem;
+        color: var(--text);
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .card h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.125rem;
+        font-weight: 600;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .card a {
+        display: inline-block;
+        margin-top: 0.75rem;
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .card a:hover {
+        text-decoration: underline;
+      }
+
+      .tag {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--accent);
+        background: color-mix(in srgb, var(--accent) 15%, transparent);
+        padding: 0.2rem 0.5rem;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+      }
+
+      footer {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+        font-size: 0.875rem;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Reference Architecture</h1>
+        <p class="lede">
+          This repository collects opinionated, runnable reference stacks—useful as
+          blueprints for layering web frontends, HTTP APIs, relational data, and
+          deployment tooling in a way that mirrors production concerns.
+        </p>
+      </header>
+
+      <h2>Implementations</h2>
+
+      <article class="card">
+        <span class="tag">01 — Enterprise 3-tier</span>
+        <h3>React, Go (Gin), PostgreSQL</h3>
+        <p>
+          A full-stack users CRUD demo with a Vite + React + TypeScript UI, a Go API
+          using clean architecture (Gin, pgx, structured logging), and three PostgreSQL
+          16 instances with logical replication from a write primary to read-oriented
+          replicas. Docker Compose and Kubernetes manifests are included.
+        </p>
+        <a href="01/README.md">Read the detailed README →</a>
+      </article>
+
+      <footer>
+        Open <code>01/README.md</code> in your editor or repository host for setup,
+        API details, and operations. Run the stack from the <code>01/</code> directory
+        (see that README for exact commands).
+      </footer>
+    </div>
+  </body>
+</html>
