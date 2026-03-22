@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-custom
+  name: ref-app-01
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: nginx-custom
+      app: ref-app-01
   template:
     metadata:
       labels:
-        app: nginx-custom
+        app: ref-app-01
         spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
@@ -24,4 +24,4 @@ spec:
       volumes:
       - name: html
         configMap:
-          name: nginx-html
+          name: ref-app-01-index-html

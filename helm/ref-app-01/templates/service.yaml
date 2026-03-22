@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
+  name: ref-app-01-service
 spec:
   type: {{ .Values.service.type }}
   selector:
-    app: nginx-custom
+    app: ref-app-01
   ports:
   - port: {{ .Values.service.port }}
     targetPort: 80

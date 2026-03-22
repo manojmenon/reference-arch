@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: nginx-html
+  name: ref-app-01-index-html
 data:
   index.html: |
 {{ .Files.Get "files/index.html" | indent 4 }}
