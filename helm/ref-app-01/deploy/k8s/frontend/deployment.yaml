@@ -3,7 +3,8 @@ kind: Deployment
 metadata:
   name: enterprise-frontend
 spec:
-  replicas: 1
+  replicas: 2
+ 
   selector:
     matchLabels:
       app: enterprise-frontend
@@ -12,9 +13,11 @@ spec:
       labels:
         app: enterprise-frontend
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: frontend
-          image: enterprise-3tier-frontend:latest
+          image: ghcr.io/manojmenon/enterprise-3tier-frontend:1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

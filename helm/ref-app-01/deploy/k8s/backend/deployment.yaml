@@ -3,7 +3,8 @@ kind: Deployment
 metadata:
   name: enterprise-backend
 spec:
-  replicas: 1
+  replicas: 2
+ 
   selector:
     matchLabels:
       app: enterprise-backend
@@ -12,10 +13,12 @@ spec:
       labels:
         app: enterprise-backend
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret 
       containers:
         - name: backend
-          image: enterprise-3tier-backend:latest
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/manojmenon/enterprise-3tier-backend:1.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
