@@ -1,0 +1,10 @@
+replicaCount: 4
+
+image:
+  repository: nginx
+  tag: stable
+
+service:
+  type: NodePort
+  port: 80
+  nodePort: 30007
