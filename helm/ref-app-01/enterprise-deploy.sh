@@ -1,9 +1,12 @@
-echo "update the GITHUB_TOKEN and then only proceed"
-echo GITHUB_TOKEN=$GITHUB_TOKEN
+echo ""
+echo "1.Make sure argocd is deployed on the cluster - if not deploy argocd first"
+echo "2.Make sure GITHUB_TOKEN environment variable is set"
 echo ""
 echo "Press CR if the above is correct or Ctrl-C to quit"
 read x
+./create-secret.sh
 
+echo  "Deleting the namespace..."
 kubectl delete ns ent-3t-app-01 --ignore-not-found
 
 kubectl create ns ent-3t-app-01

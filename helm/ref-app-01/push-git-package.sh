@@ -1,6 +1,5 @@
-echo "update the GITHUB_TOEKN and then only proceed"
-read x
-echo GITHUB | docker login ghcr.io -u manojmenon --password-stdin
+echo "Do a docker login first"
+ docker login ghcr.io -u manojmenon 
 
 docker build -t enterprise-3tier-backend:latest ./backend
 docker build -t enterprise-3tier-frontend:latest ./frontend
